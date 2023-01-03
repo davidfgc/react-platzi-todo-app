@@ -13,7 +13,7 @@ function useLocalStorage(key, initialValue) {
     const saveAppData = (appData) => {
         localStorage.setItem(key, JSON.stringify(appData));
     }
-    
+
     return [appData, saveAppData];
 }
 
@@ -60,6 +60,7 @@ function TodoList() {
             completed: false
         });
         saveItems(itemsCopy);
+        setNewItemDescription('');
     }
 
     const saveItems = (newItems) => {
@@ -70,12 +71,15 @@ function TodoList() {
 
     return (
         <div className='todoList'>
-            <h1>My TODO list</h1>
-            <h5>{pendingItems.length} pending</h5>
-            <h5>
-                <input type={'checkbox'} id='inHideCompleted' defaultChecked={isHidingCompleted} onChange={toggleHideCompleted}/>
-                <label htmlFor='inHideCompleted'>Hide completed</label>
-            </h5>
+            <h1 className='title'>My TODOs list</h1>
+            <div className='topMenu'>
+            <input className='deleteButton' type={'button'} value={'Delete completed'} onClick={() => saveItems(pendingItems)}/>
+                <input 
+                    className='primaryButton' 
+                    type={'button'} 
+                    value={`${isHidingCompleted ? 'Show Completed' : 'Hide Completed'} (${items.length - pendingItems.length})`} 
+                    onClick={toggleHideCompleted}/>
+            </div>
             {showingItems.map(item => 
                 <TodoItem key={item.id} item={item} completeItem={() => completeItem(item)}/>
             )}
@@ -86,10 +90,7 @@ function TodoList() {
                     placeholder={'New item description'} 
                     value={newItemDescription} 
                     onChange={(arg) => setNewItemDescription(arg.target.value)}/>
-                <input className='createButton' type={'button'} value={'Create'} onClick={createNewItem}/>
-            </div>
-            <div className='deleteItems'>
-                <input className='deleteButton' type={'button'} value={'Delete completed'} onClick={() => saveItems(pendingItems)}/>
+                <input className='primaryButton' type={'button'} value={'Create'} onClick={createNewItem}/>
             </div>
         </div>
     )
