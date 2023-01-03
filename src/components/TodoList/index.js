@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import './TodoList.css';
 
-import { TodoItem } from './TodoItem';
+import { TodoItem } from '../TodoItem';
 
 
 function TodoList() {
