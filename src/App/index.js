@@ -4,6 +4,7 @@ import './App.css';
 import { TodoContext } from '../components/TodoContext';
 import { TodoList } from '../components/TodoList';
 import { Modal } from '../components/Modal';
+import { TodoForm } from '../components/TodoForm';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
       <TodoList />
       {showModal &&
           <Modal>
-              <h1>Modal 2</h1>
+              <TodoForm />
           </Modal>
       }
     </>

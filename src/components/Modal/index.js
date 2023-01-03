@@ -6,10 +6,8 @@ import "./Modal.css";
 
 function Modal({ children }) {
 
-const { setShowModal } = React.useContext(TodoContext);
-
   return ReactDOM.createPortal(
-    <div className="modal" onClick={() => setShowModal(false)}>{children}</div>,
+    <div className="modal">{children}</div>,
     document.getElementById("modal"));
 }
 
