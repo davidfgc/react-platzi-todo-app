@@ -1,11 +1,14 @@
 import React from 'react';
 
 import './App.css';
+import { TodoProvider } from '../components/TodoContext';
 import { TodoList } from '../components/TodoList';
 
 function App() {
   return (
-    <TodoList />
+    <TodoProvider>
+      <TodoList />
+    </TodoProvider>
   );
 }
 
