@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-platzi-todo-app/static/css/main.7470fc2a.css",
+    "main.js": "/react-platzi-todo-app/static/js/main.3efe9ca4.js",
+    "index.html": "/react-platzi-todo-app/index.html",
+    "main.7470fc2a.css.map": "/react-platzi-todo-app/static/css/main.7470fc2a.css.map",
+    "main.3efe9ca4.js.map": "/react-platzi-todo-app/static/js/main.3efe9ca4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7470fc2a.css",
+    "static/js/main.3efe9ca4.js"
+  ]
+}
