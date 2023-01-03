@@ -8,14 +8,15 @@ import { TodoItem } from '../TodoItem';
 
 function TodoList() {
     
-    const defatulItems = [
-        {id: 0, description: 'My pending item', completed: false},
-        {id: 1, description: 'My completed item', completed: true},
-    ];
-    const [items, setItems] = React.useState(defatulItems);
+    const currentAppDataTag = 'ROAM_TODOS_APP';
+
+    const appDataString = localStorage.getItem(currentAppDataTag) || '{"maxId": 0, "items": []}';
+    const appData = JSON.parse(appDataString);
+    const [items, setItems] = React.useState(appData.items);
     const [showingItems, setShowingItems] = React.useState(items);
     const [isHidingCompleted, setIsHidingCompleted] = React.useState(false);
     const [pendingItems, setPendingItems] = React.useState(items.filter(item => !item.completed));
+    const [newItemDescription, setNewItemDescription] = React.useState('');
 
     // TODO check the warning
     useEffect(() => updateShowingItems(), [isHidingCompleted, items])
@@ -27,7 +28,7 @@ function TodoList() {
     const completeItem = (item) => {
         const itemsCopy = [...items];
         itemsCopy[items.findIndex(i => i.id === item.id)].completed = !item.completed;
-        setItems(itemsCopy);
+        saveItems(itemsCopy);
         updateShowingItems();
     }
     
@@ -38,6 +39,25 @@ function TodoList() {
         }
         else
             setShowingItems(items);
+    }
+
+    const createNewItem = () => {
+        if (!newItemDescription) return;
+
+        const itemsCopy = [...items];
+        appData.maxId++;
+        itemsCopy.push({
+            id: appData.maxId,
+            description: newItemDescription,
+            completed: false
+        });
+        saveItems(itemsCopy);
+    }
+
+    const saveItems = (newItems) => {
+        setItems(newItems);
+        appData.items = newItems;
+        localStorage.setItem(currentAppDataTag, JSON.stringify(appData));
     }
 
     return (
@@ -51,6 +71,18 @@ function TodoList() {
             {showingItems.map(item => 
                 <TodoItem key={item.id} item={item} completeItem={() => completeItem(item)}/>
             )}
+            <div className='createItem'>
+                <input
+                    className='inputDescription'
+                    type={'text'} 
+                    placeholder={'New item description'} 
+                    value={newItemDescription} 
+                    onChange={(arg) => setNewItemDescription(arg.target.value)}/>
+                <input className='createButton' type={'button'} value={'Create'} onClick={createNewItem}/>
+            </div>
+            <div className='deleteItems'>
+                <input className='deleteButton' type={'button'} value={'Delete completed'} onClick={() => saveItems(pendingItems)}/>
+            </div>
         </div>
     )
 }
