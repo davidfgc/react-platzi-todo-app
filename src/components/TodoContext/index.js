@@ -25,7 +25,7 @@ function TodoProvider({children}) {
     React.useEffect(() => updateShowingItems(), [isHidingCompleted, items])
     
     const toggleHideCompleted = () => {
-        setIsHidingCompleted(!isHidingCompleted);
+        setIsHidingCompleted(prevState => !prevState);
     }
 
     const completeItem = (item) => {
