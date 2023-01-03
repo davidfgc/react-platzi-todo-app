@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect } from 'react';
 
 import './TodoList.css';
 
@@ -7,19 +6,34 @@ import { TodoItem } from '../TodoItem';
 
 
 function useLocalStorage(key, initialValue) {
-    const appDataString = localStorage.getItem(key) || JSON.stringify(initialValue);
-    const appData = JSON.parse(appDataString);
+    const [loading, setLoading] = React.useState(true);
+    const [item, setItem] = React.useState(initialValue);
+    
+    React.useEffect(() => {
+        setTimeout(() => {
+            const itemString = localStorage.getItem(key) || JSON.stringify(initialValue);
+            setItem(JSON.parse(itemString));
+            setLoading(false);
+        }, 2000);
+    }, []);
 
-    const saveAppData = (appData) => {
-        localStorage.setItem(key, JSON.stringify(appData));
+
+    const saveItem = (item) => {
+        setItem(item);
+        localStorage.setItem(key, JSON.stringify(item));
     }
 
-    return [appData, saveAppData];
+    return {item, saveItem, loading};
 }
 
 function TodoList() {
     const currentAppDataTag = 'ROAM_TODOS_APP';
-    const [appData, saveAppData] = useLocalStorage(currentAppDataTag, {maxId: 0, items: []});
+
+    const {
+        item: appData,
+        saveItem: saveAppData,
+        loading
+    } = useLocalStorage(currentAppDataTag, {maxId: 0, items: []});
     const [items, setItems] = React.useState(appData.items);
     const [showingItems, setShowingItems] = React.useState(items);
     const [isHidingCompleted, setIsHidingCompleted] = React.useState(false);
@@ -27,7 +41,8 @@ function TodoList() {
     const [newItemDescription, setNewItemDescription] = React.useState('');
 
     // TODO check the warning
-    useEffect(() => updateShowingItems(), [isHidingCompleted, items])
+    React.useEffect(() => setItems(appData.items), [appData])
+    React.useEffect(() => updateShowingItems(), [isHidingCompleted, items])
     
     const toggleHideCompleted = () => {
         setIsHidingCompleted(!isHidingCompleted);
@@ -80,6 +95,8 @@ function TodoList() {
                     value={`${isHidingCompleted ? 'Show Completed' : 'Hide Completed'} (${items.length - pendingItems.length})`} 
                     onClick={toggleHideCompleted}/>
             </div>
+            
+            {loading && <div>Loading...</div>}
             {showingItems.map(item => 
                 <TodoItem key={item.id} item={item} completeItem={() => completeItem(item)}/>
             )}
