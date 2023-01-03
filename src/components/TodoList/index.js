@@ -6,12 +6,20 @@ import './TodoList.css';
 import { TodoItem } from '../TodoItem';
 
 
-function TodoList() {
-    
-    const currentAppDataTag = 'ROAM_TODOS_APP';
-
-    const appDataString = localStorage.getItem(currentAppDataTag) || '{"maxId": 0, "items": []}';
+function useLocalStorage(key, initialValue) {
+    const appDataString = localStorage.getItem(key) || JSON.stringify(initialValue);
     const appData = JSON.parse(appDataString);
+
+    const saveAppData = (appData) => {
+        localStorage.setItem(key, JSON.stringify(appData));
+    }
+    
+    return [appData, saveAppData];
+}
+
+function TodoList() {
+    const currentAppDataTag = 'ROAM_TODOS_APP';
+    const [appData, saveAppData] = useLocalStorage(currentAppDataTag, {maxId: 0, items: []});
     const [items, setItems] = React.useState(appData.items);
     const [showingItems, setShowingItems] = React.useState(items);
     const [isHidingCompleted, setIsHidingCompleted] = React.useState(false);
@@ -57,7 +65,7 @@ function TodoList() {
     const saveItems = (newItems) => {
         setItems(newItems);
         appData.items = newItems;
-        localStorage.setItem(currentAppDataTag, JSON.stringify(appData));
+        saveAppData(appData);
     }
 
     return (
