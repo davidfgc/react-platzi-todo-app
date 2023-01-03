@@ -1,14 +1,23 @@
 import React from 'react';
 
 import './App.css';
-import { TodoProvider } from '../components/TodoContext';
+import { TodoContext } from '../components/TodoContext';
 import { TodoList } from '../components/TodoList';
+import { Modal } from '../components/Modal';
 
 function App() {
+
+  const {showModal } = React.useContext(TodoContext);
+
   return (
-    <TodoProvider>
+    <>
       <TodoList />
-    </TodoProvider>
+      {showModal &&
+          <Modal>
+              <h1>Modal 2</h1>
+          </Modal>
+      }
+    </>
   );
 }
 

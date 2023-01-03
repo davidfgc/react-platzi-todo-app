@@ -8,7 +8,7 @@ import { TodoMenu } from '../TodoMenu';
 
 function TodoList() {
 
-    const {showingItems, loading, completeItem} = React.useContext(TodoContext);
+    const {showingItems, loading, completeItem, setShowModal} = React.useContext(TodoContext);
 
     return (
         <div className='todoList'>
@@ -18,6 +18,9 @@ function TodoList() {
             {showingItems.map(item => 
                 <TodoItem key={item.id} item={item} completeItem={() => completeItem(item)}/>
             )}
+            <div className='menuActions'>
+                <input className='primaryButton' type={'button'} value={'Show Modal'} onClick={() => setShowModal(true)}/>
+            </div>
         </div>
     )
 }
