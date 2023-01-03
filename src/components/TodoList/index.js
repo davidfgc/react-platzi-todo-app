@@ -3,6 +3,7 @@ import React from 'react';
 import './TodoList.css';
 
 import { TodoItem } from '../TodoItem';
+import { TodoMenu } from '../TodoMenu';
 
 
 function useLocalStorage(key, initialValue) {
@@ -86,29 +87,20 @@ function TodoList() {
 
     return (
         <div className='todoList'>
-            <h1 className='title'>My TODOs list</h1>
-            <div className='topMenu'>
-            <input className='deleteButton' type={'button'} value={'Delete completed'} onClick={() => saveItems(pendingItems)}/>
-                <input 
-                    className='primaryButton' 
-                    type={'button'} 
-                    value={`${isHidingCompleted ? 'Show Completed' : 'Hide Completed'} (${items.length - pendingItems.length})`} 
-                    onClick={toggleHideCompleted}/>
-            </div>
-            
+            <h1 className='title'>My TODOs list</h1>            
+            <TodoMenu 
+                newItemDescription={newItemDescription}
+                setNewItemDescription={setNewItemDescription}
+                createNewItem={createNewItem}
+                saveItems={saveItems}
+                items={items}
+                isHidingCompleted={isHidingCompleted}
+                toggleHideCompleted={toggleHideCompleted}
+                pendingItems={pendingItems} />
             {loading && <div>Loading...</div>}
             {showingItems.map(item => 
                 <TodoItem key={item.id} item={item} completeItem={() => completeItem(item)}/>
             )}
-            <div className='createItem'>
-                <input
-                    className='inputDescription'
-                    type={'text'} 
-                    placeholder={'New item description'} 
-                    value={newItemDescription} 
-                    onChange={(arg) => setNewItemDescription(arg.target.value)}/>
-                <input className='primaryButton' type={'button'} value={'Create'} onClick={createNewItem}/>
-            </div>
         </div>
     )
 }
